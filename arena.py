@@ -121,6 +121,8 @@ class Arena:
         
         # Create the 3D bar chart
         ax.bar3d(x, y, bottom, width, depth, top, shade=True, color=colors)
+        # Set the aspect ratio of the plot, mainly to reduce the vertical exaggeration
+        ax.set_box_aspect(aspect=(2, 2, 0.6))
         plt.show()
     
     def display_2d(self):
