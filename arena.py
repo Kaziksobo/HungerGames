@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 import opensimplex
-from matplotlib.colors import LinearSegmentedColormap
 
 class Arena:
     def __init__(self, width: int = 16, height: int = 16, water_size: float = 0.25, sand_size: float = 0.05, grass_size: float = 0.45, rock_size: float = 0.25):
