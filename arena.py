@@ -4,15 +4,14 @@ import random
 import opensimplex
 
 class Arena:
-    def __init__(self, width: int = 16, height: int = 16, water_size: float = 0.25, sand_size: float = 0.05, grass_size: float = 0.45, rock_size: float = 0.25):
+    def __init__(self, size: int = 21, water_size: float = 0.25, sand_size: float = 0.05, grass_size: float = 0.45, rock_size: float = 0.25):
         '''Creates an arena.
         This arena is circular and has a grid of cells, each with a value representing the elevation of the terrain.
         The terrain is divided into four types: water, sand, grass, and rock, which are dependent on the value of the cell.
         The values are generated using OpenSimplex noise.
 
         Args:
-            width (int, optional): Width of the grid. Defaults to 16.
-            height (int, optional): Height of the grid. Defaults to 16.
+            size (int, optional): The size of the arena grid. Defaults to 21.
             water_size (float, optional): Determines the amount of water in comparison to the other terrain options. Defaults to 0.25.
             sand_size (float, optional): Determines the amount of sand in comparison to the other terrain options. Defaults to 0.05.
             grass_size (float, optional): Determines the amount of grass in comparison to the other terrain options. Defaults to 0.45.
@@ -32,21 +31,16 @@ class Arena:
         self.grass_size = grass_size
         self.rock_size = rock_size
         
-        # Ensure the grid is square
-        if width != height:
-            raise ValueError('The grid must be square')
-        
-        # Set the width and height of the grid
-        self.width = width
-        self.height = height
+        # Set the size of the grid
+        self.size = size
         
         # Create a 16x16 grid of random values between 0 and 1 to represent the elevation of the terrain using OpenSimplex noise
         self.noise = opensimplex.OpenSimplex(seed=random.randint(0, 100))
-        self.grid = [[(self.noise.noise2(x / 10, y / 10) + 1) / 2 for y in range(self.height)] for x in range(self.width)]
+        self.grid = [[(self.noise.noise2(x / 10, y / 10) + 1) / 2 for y in range(self.size)] for x in range(self.size)]
         
         # Apply circular mask to the grid
-        mask = self._create_circular_mask(self.height, self.width)
-        self.grid = [[self.grid[x][y] if mask[x][y] else None for y in range(self.height)] for x in range(self.width)]
+        mask = self._create_circular_mask(self.size, self.size)
+        self.grid = [[self.grid[x][y] if mask[x][y] else None for y in range(self.size)] for x in range(self.size)]
         
         # Width for displaying plots
         self.fig_width = 11
@@ -91,7 +85,7 @@ class Arena:
         # Create a mask where the distance from the center is less than or equal to the radius
         mask = dist_from_center <= radius
         return mask
-
+        
     def display_3d(self):
         '''Displays grid as a 3D bar chart using matplotlib, with the x and y axis representing the grid coordinates and the z axis representing the elevation
         '''
