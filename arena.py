@@ -39,7 +39,7 @@ class Arena:
         self.grid = [[(self.noise.noise2(x / 10, y / 10) + 1) / 2 for y in range(self.size)] for x in range(self.size)]
         
         # Apply circular mask to the grid
-        mask = self._create_circular_mask(self.size, self.size)
+        mask = self._create_circular_mask(self.size)
         self.grid = [[self.grid[x][y] if mask[x][y] else None for y in range(self.size)] for x in range(self.size)]
         
         # Width for displaying plots
@@ -65,37 +65,35 @@ class Arena:
         else:
             return 'gray'
     
-    def _create_circular_mask(self, h: int, w: int) -> np.ndarray:
+    def _create_circular_mask(self, size: int) -> np.ndarray:
         '''Creates a circular mask for the grid
 
         Args:
-            h (int): Height of the grid
-            w (int): Width of the grid
+            size (int): The size of the grid
 
         Returns:
             np.ndarray: The circular mask
         '''
         # Calculate the center of the grid
-        center = (int(h/2), int(w/2))
+        center = size // 2, size // 2
         # Calculate the radius of the circular mask
-        radius = min(center[0], center[1], h-center[0], w-center[1])
+        radius = min(center[0], center[1], size-center[0], size-center[1])
         # Create a grid of distances from the center
-        Y, X = np.ogrid[:h, :w]
+        Y, X = np.ogrid[:size, :size]
         dist_from_center = np.sqrt((X - center[1])**2 + (Y - center[0])**2)
-        # Create a mask where the distance from the center is less than or equal to the radius
-        mask = dist_from_center <= radius
-        return mask
-        
-    def display_3d(self):
-        '''Displays grid as a 3D bar chart using matplotlib, with the x and y axis representing the grid coordinates and the z axis representing the elevation
+        return dist_from_center <= radius
+
+    def _3d_data(self):
+        '''Creates the data for a 3D bar chart
+
+        Returns:
+            x (int): The x coordinates of each cell in the grid
+            y (int): The y coordinates of each cell in the grid
+            top (float): The elevation values from the grid
+            bottom (float): The bottom values for the 3D bar chart
+            width (int): The width of the 3D bar chart
+            depth (int): The depth of the 3D bar chart
         '''
-        # Set up figure, with figsize based on a 16:9 aspect ratio
-        aspect_ratio = 16 / 9
-        fig_height = self.fig_width / aspect_ratio
-        fig = plt.figure(figsize=(self.fig_width, fig_height))
-        # Create 3D plot
-        ax = fig.add_subplot(111, projection='3d')
-        
         # Create data for a 3D bar chart
         # For the x values we need to create a list of the x coordinates of each cell in the grid, by using the length of the grid array as the x values
         # For the y values we use the length of one of the rows nested in the grid array. This approach assumes the grid is a rectangle, with the same number of columns in each row
@@ -111,6 +109,22 @@ class Arena:
         top = [self.grid[i][j] if self.grid[i][j] is not None else 0 for i, j in zip(x, y)]
         bottom = np.zeros_like(top)
         width = depth = 1
+        return x, y, top, bottom, width, depth
+        
+        
+    def display_3d(self):
+        '''Displays grid as a 3D bar chart using matplotlib, with the x and y axis representing the grid coordinates and the z axis representing the elevation
+        '''
+        # Set up figure, with figsize based on a 16:9 aspect ratio
+        aspect_ratio = 16 / 9
+        fig_height = self.fig_width / aspect_ratio
+        fig = plt.figure(figsize=(self.fig_width, fig_height))
+        # Create 3D plot
+        ax = fig.add_subplot(projection='3d')
+        
+        # Get the data for the 3D bar chart
+        x, y, top, bottom, width, depth = self._3d_data()
+        # Get the colors for the 3D bar chart based on the value of the cell
         colors = [self._value_to_terrain(self.grid[i][j]) if self.grid[i][j] is not None else 'white' for i, j in zip(x, y)]
         
         # Create the 3D bar chart
@@ -138,14 +152,13 @@ class Arena:
         '''Displays grid as a 2D plot with values in each cell
         '''
         # Set up figure, with figsize based on a square aspect ratio
-        fig_height = self.fig_width
-        fig = plt.figure(figsize=(self.fig_width, fig_height))
+        fig = plt.figure(figsize=(self.fig_width, self.fig_width))
         # Create 2D plot
-        ax = fig.add_subplot(111)
+        ax = fig.add_subplot()
         
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
-                if self.grid[i][j] is not None:
+                if self.grid[i][j]:
                     # Finds correct colour to use based on the value of the cell
                     color = self._value_to_terrain(self.grid[i][j])
                     # Create a rectangle for each cell in the grid
