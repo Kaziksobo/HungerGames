@@ -34,21 +34,15 @@ class Resources(Arena):
         for i in range(self.size):
             for j in range(self.size):
                 if self.grid[i][j]:
-                    # If the cell is in the outermost ring, give a quantity of 0.8 and a quality of 0.2, and randomly assign a resource type
-                    if (i > 0 and self.grid[i-1][j] is None) or (i < self.size - 1 and self.grid[i+1][j] is None) or \
-                       (j > 0 and self.grid[i][j-1] is None) or (j < self.size - 1 and self.grid[i][j+1] is None):
-                        self.grid[i][j] = (0.8, random.choice(['weapons', 'food', 'medicine']), 0.2)
-                        current_ring = 2
+                    # If the cell is in the outermost ring, give a quantity of 0.8 and a quality of 0.2, and randomly assign a resource type.
                     # Repeat this process, reducing the quantity and increasing the quality as we move towards the centre of the arena.
                     # The rate of reduction and increase should be based on the size of the arena.
-                    # CURRENTLY DOES NOT WORK
-                    rate_of_reduction = 0.8 / (self.size // 2)
-                    rate_of_increase = 0.2 / (self.size // 2)
-                    quantity = 0.8 - rate_of_reduction * current_ring
-                    quality = 0.2 + rate_of_increase * current_ring
-                    if self.grid[i][j] == (None, None, None):
-                        self.grid[i][j] = (quantity, random.choice(['weapons', 'food', 'medicine']), quality)
-                        current_ring += 1
+                    # This currently works, however disregards the fact the grid is a circle.
+                    distance_to_center = min(i, j, self.size - i - 1, self.size - j - 1)
+                    max_distance = self.size // 2
+                    quantity = 0.8 - (0.8 * distance_to_center / max_distance)
+                    quality = 0.2 + (0.8 * distance_to_center / max_distance)
+                    self.grid[i][j] = (quantity, random.choice(['weapons', 'food', 'medicine']), quality)
         return self.grid
     
     def display_2d(self):
