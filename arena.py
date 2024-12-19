@@ -83,7 +83,7 @@ class Arena:
         dist_from_center = np.sqrt((X - center[1])**2 + (Y - center[0])**2)
         return dist_from_center <= radius
 
-    def _3d_data(self):
+    def _3d_data(self) -> tuple:
         '''Creates the data for a 3D bar chart
 
         Returns:
