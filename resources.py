@@ -11,13 +11,16 @@ class Resources(Arena):
         # Set the size of the grid
         self.size = arena.size
         # create empty grid
-        self.grid = [[(None, None, None) for y in range(self.size)] for x in range(self.size)]
+        self.grid = [
+            [(None, None, None) for _ in range(self.size)]
+            for _ in range(self.size)
+        ]
         # apply circular mask to the grid
         mask = self._create_circular_mask(self.size)
         self.grid = [[self.grid[x][y] if mask[x][y] else None for y in range(self.size)] for x in range(self.size)]
         # create the resources grid
         self.grid = self._create_resources_grid()
-        
+
         # Width for displaying plots
         self.fig_width = 11
     
