@@ -19,7 +19,7 @@ class Resources(Arena):
         mask = self._create_circular_mask(self.size)
         self.grid = [[self.grid[x][y] if mask[x][y] else None for y in range(self.size)] for x in range(self.size)]
         # create the resources grid
-        self.grid = self._create_resources_grid()
+        self._create_resources_grid()
 
         # Width for displaying plots
         self.fig_width = 11
@@ -58,19 +58,23 @@ class Resources(Arena):
                         
                         # Assign the resource tuple to the grid cell
                         self.grid[i][j] = (quantity, resource_type, quality)
-
-        return self.grid
     
     def display_2d(self):
+        """Displays the 2D resource grid.
+
+        The grid is visualized using matplotlib, with each cell colored
+        according to its resource quality.  Quantities are displayed
+        as text within each cell.
+        """
         fig = plt.figure(figsize=(self.fig_width, self.fig_width))
         ax = fig.add_subplot(111)
         
         for i in range(self.size):
             for j in range(self.size):
                 if self.grid[i][j]:
-                    rect = plt.Rectangle([j, self.size - i - 1], 1, 1)
-                    ax.add_patch(rect)
                     quantity, resource_type, quality = self.grid[i][j]
+                    rect = plt.Rectangle([j, self.size - i - 1], 1, 1, fc=plt.cm.viridis(quality))
+                    ax.add_patch(rect)
                     if resource_type:
                         ax.text(j + 0.5, self.size - i - 0.5, f'{quantity:.2f}', ha='center', va='center', color='white')
         
