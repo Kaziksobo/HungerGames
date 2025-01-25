@@ -24,25 +24,41 @@ class Resources(Arena):
         # Width for displaying plots
         self.fig_width = 11
     
-    def _create_resources_grid(self):
-        '''Creates the resource grid.
-        Each resource has 3 values: quantity, quality and type (quality and quantity are measured from 0 to 1).
-        The design will consist of a ring of high quantity, low quality resources around the edge of the arena. The closer to the centre of the arena,
-        the lower the quantity and the higher the quality of the resources. Then in the centre, there are a high quantity of high quality weapons.
-        The types of resources are: weapons, food and medicine. The resources are randomly distributed within the rings.'''
-        # use self.grid and add the outside ring of resources
+    def _create_resources_grid(self) -> list:
+        """Creates the resource grid.
+
+        Resources are represented as tuples: (quantity, type, quality).
+        - Quantity: Higher at the edges, lower towards the center.
+        - Type: Randomly chosen from 'weapons', 'food', 'medicine'.
+        - Quality: Lower at the edges, higher towards the center.
+        """
+
+        center_x = self.size // 2
+        center_y = self.size // 2
+        max_distance_squared = center_x**2  # Maximum squared distance from the center
+
         for i in range(self.size):
             for j in range(self.size):
+                # Make sure the cell isn't masked out
                 if self.grid[i][j]:
-                    # If the cell is in the outermost ring, give a quantity of 0.8 and a quality of 0.2, and randomly assign a resource type.
-                    # Repeat this process, reducing the quantity and increasing the quality as we move towards the centre of the arena.
-                    # The rate of reduction and increase should be based on the size of the arena.
-                    # This currently works, however disregards the fact the grid is a circle.
-                    distance_to_center = min(i, j, self.size - i - 1, self.size - j - 1)
-                    max_distance = self.size // 2
-                    quantity = 0.8 - (0.8 * distance_to_center / max_distance)
-                    quality = 0.2 + (0.8 * distance_to_center / max_distance)
-                    self.grid[i][j] = (quantity, random.choice(['weapons', 'food', 'medicine']), quality)
+                    # Calculate the squared distance from the center
+                    distance_squared = (i - center_x)**2 + (j - center_y)**2
+                    
+                    # Ensure the distance is within the circular mask
+                    if distance_squared <= max_distance_squared:
+                        # Calculate normalized distance from the center (0.0 at center, 1.0 at edge)
+                        normalized_distance = (distance_squared**0.5) / center_x
+                        
+                        # Calculate quantity and quality based on distance
+                        quantity = 0.2 + 0.6 * normalized_distance
+                        quality = 0.8 - 0.6 * normalized_distance
+                        
+                        # Randomly assign a resource type
+                        resource_type = random.choice(['weapons', 'food', 'medicine'])
+                        
+                        # Assign the resource tuple to the grid cell
+                        self.grid[i][j] = (quantity, resource_type, quality)
+
         return self.grid
     
     def display_2d(self):
