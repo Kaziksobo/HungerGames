@@ -10,21 +10,23 @@
 
 - [📝 Table of Contents](#-table-of-contents)
 - [🧐 About ](#-about-)
+- [Current Status ](#current-status-)
 - [⛏️ Built Using ](#️-built-using-)
 - [✍️ Author ](#️-author-)
 - [🎉 Acknowledgements ](#-acknowledgements-)
 
 ## 🧐 About <a name = "about"></a>
 
-Whilst I have never been much of a fan of the Hunger Games series bar watching the movies and reading the books once as a kid, the concept of the games themselves are morbidly interesting. I also believe that the games themselves are not designed that well in the books and movies, and that I could do a better job. 
+Here I am attempting to simulate the Hunger Games. However, I have made my own version of the games with some tweaks that I believe improve the game and help it provide better entertainment.
 
-Problem 1: The cornucopia. Concentrating all of the high value resources in the centre of the arena, and starting all the players in the same place gives the players two choices: fight for the best resources, in which case they are likely to die, or run away and try to survive with what little they can find in the rest of the arena, which can be quite boring to watch. Even minecraft hunger games servers figured that resources should be spread out lol.
+One problem with the current Hunger Games is the Cornucopia. Concentrating all of the high value resources in the centre of the arena, and starting all the players in the same place gives the players two choices: fight for the best resources, in which case they are likely to die, or run away and try to survive with what little they can find in the rest of the arena, which can be quite boring to watch. Even minecraft hunger games servers figured that resources should be spread out lol.
+To fix this I have decided that resources can be generated anywhere, however with the quantity (likelihood of there being a resource on the tile) decreasing but the quality increasing.
 
-Problem 2: Dying of natural causes. Whilst I understand the morbid entertainment the veiwers may get from watching the tributes fight and kill each other, watching them die of natural causes is not entertaining. So the players should be encouraged to come into contact with each other, increasing the likelihood of a fight.
+Another problem is dying of natural causes. Whilst I understand the morbid entertainment the veiwers may get from watching the tributes fight and kill each other, watching them die of natural causes is not entertaining. So the players should be encouraged to come into contact with each other, increasing the likelihood of a fight. To do this, I will start all the players around the outside ring of the arena, as this prevents too many of them from dying too quickly, but retain a cornucopia style with some of the best resources in the centre, to incentivise all the players to move towards the centre, meeting others along the way.
 
-Problem 3: Gamemaker intervention. In the series the gamemakers often intervene to force the tributes to come into contact with each other, however I believe that this would be unnecessary if the arena was designed well.
+## Current Status <a name = "current_status"></a>
 
-So far I have created a customsable arena with different elevations and terrains that can be displayed using matplotlib.
+So far I have created a circular arena (where the size can be customised) with different elevations and terrains that can be displayed using matplotlib. The terrain is determined by the elevation, and the elevation bounds for each of the 4 terrain types (water, sand, grass and rock) can also be customised.
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
