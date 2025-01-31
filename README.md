@@ -10,7 +10,7 @@
 
 - [📝 Table of Contents](#-table-of-contents)
 - [🧐 About ](#-about-)
-- [Current Status ](#current-status-)
+- [👷‍♂️ Current Status ](#️-current-status-)
 - [⛏️ Built Using ](#️-built-using-)
 - [✍️ Author ](#️-author-)
 - [🎉 Acknowledgements ](#-acknowledgements-)
@@ -24,16 +24,18 @@ To fix this I have decided that resources can be generated anywhere, however wit
 
 Another problem is dying of natural causes. Whilst I understand the morbid entertainment the veiwers may get from watching the tributes fight and kill each other, watching them die of natural causes is not entertaining. So the players should be encouraged to come into contact with each other, increasing the likelihood of a fight. To do this, I will start all the players around the outside ring of the arena, as this prevents too many of them from dying too quickly, but retain a cornucopia style with some of the best resources in the centre, to incentivise all the players to move towards the centre, meeting others along the way.
 
-## Current Status <a name = "current_status"></a>
+## 👷‍♂️ Current Status <a name = "current_status"></a>
 
 So far I have created a circular arena (where the size can be customised) with different elevations and terrains that can be displayed using matplotlib. The terrain is determined by the elevation, and the elevation bounds for each of the 4 terrain types (water, sand, grass and rock) can also be customised.
+
+I have also created a resources grid, which adds the resources to the arena following the system I described above. There is then a basic display of the resources on the arena using matplotlib.
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
 - [Python](https://www.python.org/) - Main language
 - [Matplotlib](https://matplotlib.org/) - For visualising the arena
 - [Numpy](https://numpy.org/) - For creating the arena
-- [Opensimplex](https://code.larus.se/lmas/opensimplex) - For generating the terrain
+- [Opensimplex](https://code.larus.se/lmas/opensimplex) - For generating the terrain using simplex noise
 
 ## ✍️ Author <a name = "author"></a>
 
